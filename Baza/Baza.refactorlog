@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="caa8c7fa-5bd2-4add-a67e-42de980a4170" ChangeDateTime="08/01/2015 17:54:54">
+    <Property Name="ElementName" Value="[dbo].[Korisnik].[Ime]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Korisnik]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Name" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8b703b1b-f425-4d9d-919c-5badd7497e4c" ChangeDateTime="08/01/2015 17:54:57">
+    <Property Name="ElementName" Value="[dbo].[Korisnik].[Tip_Naloga]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Korisnik]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Account_type" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="2c944703-051f-4280-8f3f-aa9ef2cf77b8" ChangeDateTime="08/01/2015 17:55:02">
+    <Property Name="ElementName" Value="[dbo].[Korisnik].[Aktivan]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Korisnik]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Active" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="4fb8b5bd-7abc-4389-8172-a276367365be" ChangeDateTime="08/01/2015 18:04:54">
+    <Property Name="ElementName" Value="[dbo].[Poruka].[Room]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Poruka]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="RoomId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="8a8cfaad-8bc0-44be-bef8-95c7634858ad" ChangeDateTime="08/01/2015 18:55:25">
+    <Property Name="ElementName" Value="[dbo].[FK_Room_type_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Room_type]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[d]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="48b76ff7-d670-40e4-b6cb-319cac35a5c5" ChangeDateTime="08/01/2015 18:55:55">
+    <Property Name="ElementName" Value="[dbo].[FK_Soba_ToTable]" />
+    <Property Name="ElementType" Value="SqlForeignKeyConstraint" />
+    <Property Name="ParentElementName" Value="[dbo].[Soba]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="[FK_Room_Room_type]" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3429ffff-cb22-496b-89fb-5ce01a8e14dc" ChangeDateTime="08/01/2015 19:05:44">
+    <Property Name="ElementName" Value="[dbo].[Room].[AdminId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Room]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Admin" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="022c2d2e-4746-45bc-9db6-aac9b19e6f09" ChangeDateTime="08/01/2015 19:07:46">
+    <Property Name="ElementName" Value="[dbo].[Poruka].[RoomId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Poruka]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Room" />
+  </Operation>
+</Operations>
