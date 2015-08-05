@@ -14,6 +14,8 @@
 <body>
     <div class="container">
         <input type="text" id="message" />
+        <ul class="active-users"></ul>
+        <hr />
         <input type="button" id="sendmessage" value="Send" />
         <input type="hidden" id="displayname" />
         <ul id="discussion"></ul>
@@ -28,31 +30,55 @@
     <!--Add script to update the page and send messages.-->
     <script type="text/javascript">
         $(function () {
-            // Declare a proxy to reference the hub.
+
             var chat = $.connection.mainHub;
-            // Create a function that the hub can call to broadcast messages.
+
             chat.client.broadcastMessage = function (name, message) {
-                // Html encode display name and message.
+
                 var encodedName = $('<div />').text(name).html();
                 var encodedMsg = $('<div />').text(message).html();
-                // Add the message to the page.
+
                 $('#discussion').append('<li><strong>' + encodedName
                     + '</strong>:&nbsp;&nbsp;' + encodedMsg + '</li>');
             };
-            // Get the user name and store it to prepend to messages.
+
+            chat.client.generateActiveUsers = function (users) {
+                console.log(users); // [DEV]
+                if ($('.active-users > li').length > 0) {
+                    $('.active-users').append('<li>' + users[users.length - 1].Name + '</li>');
+                } else
+                    for (var i = 0; i < users.length; i++) {
+                        $('.active-users').append('<li>' + users[i].Name + '</li>');
+                    }
+            };
+
+            chat.client.userCreationCallback = function (user) {
+                console.log('User created!');
+                console.log(user);  // [DEV]
+
+                //chat.server.listUsers();
+            };
+
             $('#displayname').val(prompt('Enter your name:', ''));
-            // Set initial focus to message input box.
+
             $('#message').focus();
-            // Start the connection.
+
             $.connection.hub.start().done(function () {
+                chat.server.createUser($('#displayname').val());
+                chat.server.listUsers();
+
                 $('#sendmessage').click(function () {
-                    // Call the Send method on the hub.
                     chat.server.send($('#displayname').val(), $('#message').val());
-                    // Clear text box and reset focus for next comment.
+
                     $('#message').val('').focus();
                 });
             });
+
+            $.connection.hub.disconnected(function () {     // stub for disconnection
+                chat.server.userDisconnected($('#displayname').val());
+            })
         });
     </script>
 </body>
+
 </html>
