@@ -24,9 +24,14 @@ namespace ChatApp
             user.Last_accessed = DateTime.Now;
             user.ConnectionId = Context.ConnectionId;   // this DOES NOT go into the database
 
+            JoinRoom(user.ConnectionId, "Lobby");     // Lobby is the default group
+
+            //Groups.Add(user.ConnectionId, "Lobby");
+
             users.Add(user);
 
-            Clients.All.userCreationCallback(user);                         
+            Clients.All.userCreationCallback(user);
+
         }
 
         public void ListUsers()
@@ -48,10 +53,22 @@ namespace ChatApp
 
         public override Task OnDisconnected(bool stopCalled)
         {
-            users.Remove(users.Find(x => x.ConnectionId == Context.ConnectionId));
+            User user = users.Find(x => x.ConnectionId == Context.ConnectionId);
+            users.Remove(user);
+
             Clients.All.generateActiveUsers(users);
 
             return base.OnDisconnected(stopCalled);
         }
+
+        public Task JoinRoom(string contextId, string roomName)
+        {
+            return Groups.Add(contextId, roomName);
+        }
+
+        //public Task LeaveRoom(string contextId, string roomName)
+        //{
+        //    return Groups.Add(contextId, roomName);
+        //}
     }
 }
