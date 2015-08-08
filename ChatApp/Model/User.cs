@@ -62,5 +62,13 @@ namespace ChatApp.Model
             set { last_accessed = value; }
         }
 
+        private string connectionId;
+
+        public string ConnectionId
+        {
+            get { return connectionId; }
+            set { connectionId = value; }
+        }
+
     }
 }

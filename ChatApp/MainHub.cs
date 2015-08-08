@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Microsoft.AspNet.SignalR;
 using ChatApp.Model;
+using System.Threading.Tasks;
 
 namespace ChatApp
 {
@@ -13,6 +14,7 @@ namespace ChatApp
 
         public void CreateUser(string name)
         {
+
             User user = new User();
             user.Id = 0;
             user.Name = name;
@@ -20,6 +22,7 @@ namespace ChatApp
             user.Active = true;
             user.Created_at = DateTime.Now;
             user.Last_accessed = DateTime.Now;
+            user.ConnectionId = Context.ConnectionId;   // this DOES NOT go into the database
 
             users.Add(user);
 
@@ -36,12 +39,19 @@ namespace ChatApp
             Clients.All.broadcastMessage(name, message);
         }
 
-        public void UserDisconnected(string name)   // stub for disconnection event
-        {
-            users.Remove(users.Find(x => x.Name == name));
-            // TO-DO: Database statement that will update the timestamps and the active status
+        //public void UserDisconnected(string name)   // stub for disconnection event
+        //{
+        //    users.Remove(users.Find(x => x.Name == name));
 
+        //    Clients.All.generateActiveUsers(users);
+        //}
+
+        public override Task OnDisconnected(bool stopCalled)
+        {
+            users.Remove(users.Find(x => x.ConnectionId == Context.ConnectionId));
             Clients.All.generateActiveUsers(users);
+
+            return base.OnDisconnected(stopCalled);
         }
     }
 }

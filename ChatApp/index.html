@@ -44,6 +44,7 @@
 
             chat.client.generateActiveUsers = function (users) {
                 console.log(users); // [DEV]
+                $('.active-users').empty();
                 if ($('.active-users > li').length > 0) {
                     $('.active-users').append('<li>' + users[users.length - 1].Name + '</li>');
                 } else
@@ -73,10 +74,6 @@
                     $('#message').val('').focus();
                 });
             });
-
-            $.connection.hub.disconnected(function () {     // stub for disconnection
-                chat.server.userDisconnected($('#displayname').val());
-            })
         });
     </script>
 </body>
