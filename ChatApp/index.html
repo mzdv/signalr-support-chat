@@ -53,28 +53,42 @@
                     }
             };
 
-            chat.client.userCreationCallback = function (user) {
-                console.log('User created!'); // [DEV]
-                console.log(user);  // [DEV]
+            chat.client.generateRooms = function (rooms) {
+                console.log(rooms); // [DEV]
+                $('.chat-rooms').empty();
+                if ($('.chat-rooms > li').length > 0) {
+                    $('.chat-rooms').append('<li>' + rooms[rooms.length - 1].Name + '</li>');
+                } else
+                    for (var i = 0; i < users.length; i++) {
+                        $('.chat-rooms').append('<li>' + rooms[i].Name + '</li>');
+                    };
 
-                //chat.server.listUsers();
-            };
+                chat.client.userCreationCallback = function (user) {    // [DEV]
+                    console.log('User created!');
+                    console.log(user);
 
-            $('#displayname').val(prompt('Enter your name:', ''));
+                };
 
-            $('#message').focus();
+                chat.client.roomCreationCallback = function (room) { // [DEV]
+                    console.log('Room created!');
+                    console.log(room);
+                }
 
-            $.connection.hub.start().done(function () {
-                chat.server.createUser($('#displayname').val());
-                chat.server.listUsers();
+                $('#displayname').val(prompt('Enter your name:', ''));
 
-                $('#sendmessage').click(function () {
-                    chat.server.send($('#displayname').val(), $('#message').val());
+                $('#message').focus();
 
-                    $('#message').val('').focus();
+                $.connection.hub.start().done(function () {
+                    chat.server.createUser($('#displayname').val());
+                    chat.server.listUsers();
+
+                    $('#sendmessage').click(function () {
+                        chat.server.send($('#displayname').val(), $('#message').val());
+
+                        $('#message').val('').focus();
+                    });
                 });
             });
-        });
     </script>
 </body>
 

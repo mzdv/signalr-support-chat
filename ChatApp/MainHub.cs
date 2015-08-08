@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using Microsoft.AspNet.SignalR;
 using ChatApp.Model;
 using System.Threading.Tasks;
@@ -11,6 +9,7 @@ namespace ChatApp
     public class MainHub : Hub
     {
         public static List<User> users = new List<User>();
+        public static List<Room> rooms = new List<Room>();
 
         public void CreateUser(string name)
         {
@@ -24,7 +23,7 @@ namespace ChatApp
             user.Last_accessed = DateTime.Now;
             user.ConnectionId = Context.ConnectionId;   // this DOES NOT go into the database
 
-            JoinRoom(user.ConnectionId, "Lobby");     // Lobby is the default group
+            //JoinRoom(user.ConnectionId, "Lobby");     // Lobby is the default group
 
             //Groups.Add(user.ConnectionId, "Lobby");
 
@@ -32,6 +31,28 @@ namespace ChatApp
 
             Clients.All.userCreationCallback(user);
 
+        }
+
+        public void CreateRoom(string name, int visibility, User admin, string description, int status, string passcode)
+        {
+            Room room = new Room();
+            room.Id = 0;
+            room.Name = name;
+            room.Visibility = (VisibEnum)visibility;
+            room.Admin = admin;
+            room.Description = description;
+            room.Passcode = passcode;
+
+            rooms.Add(room);
+
+            Clients.All.roomCreationCallback(room);
+
+        }
+
+        public void ListRooms()
+        {
+            List<Room> visibleRooms = rooms.FindAll(x => x.Visibility == VisibEnum.ALL);    // we don't want people to know about our hidden groups
+            Clients.All.generateRooms(visibleRooms);
         }
 
         public void ListUsers()
@@ -46,7 +67,7 @@ namespace ChatApp
             message.User = users.Find(x => x.Name == name);
             message.Created_at = DateTime.Now;
             message.Content = clientMessage;
-            message.Room = null;
+            message.Room = null;        // TO-DO
 
             Clients.All.broadcastMessage(name, clientMessage);
         }
@@ -61,14 +82,10 @@ namespace ChatApp
             return base.OnDisconnected(stopCalled);
         }
 
-        public Task JoinRoom(string contextId, string roomName)
+        public Task JoinRoom(string contextId, string roomName)     // TO-DO: Race conditions here with rooms
         {
             return Groups.Add(contextId, roomName);
         }
 
-        //public Task LeaveRoom(string contextId, string roomName)
-        //{
-        //    return Groups.Add(contextId, roomName);
-        //}
     }
 }

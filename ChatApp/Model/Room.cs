@@ -53,12 +53,12 @@ namespace ChatApp.Model
             set { description = value; }
         }
 
-        private bool status;
+        private string passcode;
 
-        public bool Status
+        public string Passcode
         {
-            get { return status; }
-            set { status = value; }
+            get { return passcode; }
+            set { passcode = value; }
         }
 
     }
