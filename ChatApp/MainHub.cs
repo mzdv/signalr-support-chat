@@ -34,17 +34,17 @@ namespace ChatApp
             Clients.All.generateActiveUsers(users);
         }
 
-        public void Send(string name, string message)
+        public void Send(string name, string clientMessage)
         {
-            Clients.All.broadcastMessage(name, message);
+            Message message = new Message();
+            message.Id = 0;
+            message.User = users.Find(x => x.Name == name);
+            message.Created_at = DateTime.Now;
+            message.Content = clientMessage;
+            message.Room = null;
+
+            Clients.All.broadcastMessage(name, clientMessage);
         }
-
-        //public void UserDisconnected(string name)   // stub for disconnection event
-        //{
-        //    users.Remove(users.Find(x => x.Name == name));
-
-        //    Clients.All.generateActiveUsers(users);
-        //}
 
         public override Task OnDisconnected(bool stopCalled)
         {
