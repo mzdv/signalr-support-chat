@@ -23,9 +23,7 @@ namespace ChatApp
             user.Last_accessed = DateTime.Now;
             user.ConnectionId = Context.ConnectionId;   // this DOES NOT go into the database
 
-            //JoinRoom(user.ConnectionId, "Lobby");     // Lobby is the default group
-
-            //Groups.Add(user.ConnectionId, "Lobby");
+            JoinRoom("Lobby");
 
             users.Add(user);
 
@@ -82,10 +80,19 @@ namespace ChatApp
             return base.OnDisconnected(stopCalled);
         }
 
-        public Task JoinRoom(string contextId, string roomName)     // TO-DO: Race conditions here with rooms
+        public Task JoinRoom(string roomName)
         {
-            return Groups.Add(contextId, roomName);
+            return Groups.Add(Context.ConnectionId, roomName);
         }
 
+        public Task LeaveRoom(string roomName)
+        {
+            return Groups.Remove(Context.ConnectionId, roomName);
+        }
+
+        public void Announce()
+        {
+            Clients.Group("Lobby").addChatMessage("You are in the lobby right now.");
+        }
     }
 }

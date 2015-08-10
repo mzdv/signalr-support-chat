@@ -62,33 +62,37 @@
                     for (var i = 0; i < users.length; i++) {
                         $('.chat-rooms').append('<li>' + rooms[i].Name + '</li>');
                     };
+            };
 
-                chat.client.userCreationCallback = function (user) {    // [DEV]
-                    console.log('User created!');
-                    console.log(user);
+            chat.client.userCreationCallback = function (user) {    // [DEV]
+                console.log('User created!');
+                console.log(user);
+            };
 
-                };
+            chat.client.roomCreationCallback = function (room) { // [DEV]
+                console.log('Room created!');
+                console.log(room);
+            }
 
-                chat.client.roomCreationCallback = function (room) { // [DEV]
-                    console.log('Room created!');
-                    console.log(room);
-                }
+            $('#displayname').val(prompt('Enter your name:', ''));
 
-                $('#displayname').val(prompt('Enter your name:', ''));
+            $('#message').focus();
 
-                $('#message').focus();
+            $.connection.hub.start().done(function () {
+                chat.server.createUser($('#displayname').val());
+                chat.server.listUsers();
 
-                $.connection.hub.start().done(function () {
-                    chat.server.createUser($('#displayname').val());
-                    chat.server.listUsers();
+                $('#sendmessage').click(function () {
+                    chat.server.send($('#displayname').val(), $('#message').val());
 
-                    $('#sendmessage').click(function () {
-                        chat.server.send($('#displayname').val(), $('#message').val());
-
-                        $('#message').val('').focus();
-                    });
+                    $('#message').val('').focus();
                 });
+
+                setTimeout(function () {
+                    chat.server.announce();
+                }, 10000);
             });
+        });
     </script>
 </body>
 
